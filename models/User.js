@@ -33,7 +33,10 @@ const login = async (username, password) => {
   try {
     const authed = await bcrypt.compare(password, user[0].password);
     if(authed) {
-      const token = jwt.sign(user[0].username, process.env.AUTH_SECRET, {expiresIn: "4h"});
+      return jwt.sign({ username: user[0].username }, process.env.AUTH_SECRET, {
+        expiresIn: "4h",
+      });
+      
     } else {
       return ({message: "Username or password incorrect"})
     }
