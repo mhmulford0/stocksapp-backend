@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await login(username, password);
-    res.status(200).json({ data: user });
+    res.status(200).json({ token: user });
   } catch (error) {
     console.log(error);
     res.status(401).json({ message: "not authorizied" });
