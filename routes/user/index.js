@@ -1,3 +1,4 @@
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
@@ -5,8 +6,11 @@ const {
   allUsers,
   addUser,
   getUserById,
-  userLookup,
+  emailLookup,
+  login,
 } = require("../../models/User");
+
+
 
 router.get("/", async (req, res) => {
   try {
@@ -34,18 +38,20 @@ router.get("/:id", async (req, res) => {
 router.post("/signup", async (req, res) => {
   const { username, password, email } = req.body;
   let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 10);
+  } catch (error) {
+    return res
+      .send(500)
+      .json({ message: "there was an error with your request" });
+  }
 
-  bcrypt.hash(password, 10, (err, hash) => {
-    hashedPassword = hash;
-  });
-
-  const userExists = await userLookup(email);
-  console.log(userExists);
+  const userExists = await emailLookup(email);
   if (userExists.length === 1) {
     return res
       .status(400)
       .json({ message: "There is already an account with that email" });
-  } 
+  }
 
   if (username.length > 3 && password.length > 5 && email !== undefined) {
     try {
@@ -59,7 +65,18 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, passsword } = req.body;
+  const { username, password } = req.body;
+
+  try {
+    const user = await login(username, password);
+    res.status(200).json({ data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ message: "not authorizied" });
+  }
+  
+
+
 });
 
 module.exports = router;
