@@ -1,15 +1,19 @@
 const db = require("../data/db-config");
 
-const allUsers = async () => {
+const allUsers = () => {
   return db("users");
 };
 
-const addUser = async (username, email, password) => {
+const addUser = (username, email, password) => {
   return db("users").insert({ username, email, password });
 };
 
-const getUserById = async (id) => {
-  return db("users").where(id);
+const getUserById = (id) => {
+  return db("users").where({ id });
 };
 
-module.exports = { allUsers, addUser, getUserById };
+const userLookup = (email) => {
+  return db("users").where({ email });
+};
+
+module.exports = { allUsers, addUser, getUserById, userLookup };
