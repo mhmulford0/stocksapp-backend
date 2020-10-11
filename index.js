@@ -1,10 +1,21 @@
 require("dotenv").config();
 const express = require("express");
+const app = express();
+const cors = require("cors");
 
 const userRouter = require("./routes/user/");
-const app = express();
 
 app.use(express.json());
+const corsOptions = {
+  origin: "https://www.google.com",
+  methods: "DELETE",
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+
+
 app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => {
