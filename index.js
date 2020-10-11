@@ -8,7 +8,7 @@ const userRouter = require("./routes/user/");
 app.use(express.json());
 const corsOptions = {
   origin: "*",
-  methods: "GET,PUT,DELETE",
+  methods: "GET,PUT,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
 };

@@ -69,9 +69,8 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await login(username, password);
-    //res.status(200).json({ token: user });
-    console.log(user);
-    res.cookie("token", user, { httpOnly: true });
+    res.status(200).json({ token: user });
+    //res.cookie("token", user, { httpOnly: true });
     res.status(200).send();
   } catch (error) {
     console.log(error);
