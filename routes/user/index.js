@@ -10,9 +10,9 @@ const {
   login,
 } = require("../../models/User");
 
+const checkToken = require("../../middleware");
 
-
-router.get("/", async (req, res) => {
+router.get("/", checkToken, async (req, res) => {
   try {
     const result = await allUsers();
     res.status(200).json({ message: result });
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkToken, async (req, res) => {
   const { id } = req.params;
 
   if (id) {
