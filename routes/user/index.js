@@ -55,7 +55,7 @@ router.post("/signup", async (req, res) => {
 
   if (username.length > 3 && password.length > 5 && email !== undefined) {
     try {
-      await addUser(username, email, hashedPassword);
+      await addUser(username, email, hashedPassword, "user");
       res.status(201).json({ message: "user added" });
     } catch (error) {
       console.log(error);

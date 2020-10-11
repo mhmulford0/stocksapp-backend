@@ -6,9 +6,9 @@ const allUsers = () => {
   return db("users");
 };
 
-const addUser = (username, email, password) => {
-  console.log(username, email, password);
-  return db("users").insert({ username, email, password });
+const addUser = (username, email, password, role) => {
+  console.log(username, email, password, role);
+  return db("users").insert({ username, email, password, role });
 };
 
 const getUserById = (id) => {
@@ -23,7 +23,7 @@ const login = async (username, password) => {
   let user;
   try {
     user = await db
-      .select("username", "password")
+      .select("username", "password", "role")
       .from("users")
       .where({ username });
   } catch (error) {
@@ -33,9 +33,13 @@ const login = async (username, password) => {
   try {
     const authed = await bcrypt.compare(password, user[0].password);
     if(authed) {
-      return jwt.sign({ username: user[0].username }, process.env.AUTH_SECRET, {
-        expiresIn: "4h",
-      });
+      return jwt.sign(
+        { username: user[0].username, role: user[0].role },
+        process.env.AUTH_SECRET,
+        {
+          expiresIn: "4h",
+        }
+      );
       
     } else {
       return ({message: "Username or password incorrect"})
