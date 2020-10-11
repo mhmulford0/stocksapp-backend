@@ -7,8 +7,8 @@ const userRouter = require("./routes/user/");
 
 app.use(express.json());
 const corsOptions = {
-  origin: "https://www.google.com",
-  methods: "GET,PUT,POST,DELETE",
+  origin: "*",
+  methods: "GET,PUT,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
 };
