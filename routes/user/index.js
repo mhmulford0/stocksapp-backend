@@ -10,9 +10,9 @@ const {
   login,
 } = require("../../models/User");
 
-const checkToken = require("../../middleware");
+const {checkToken, checkAdmin} = require("../../middleware");
 
-router.get("/", checkToken, async (req, res) => {
+router.get("/", checkToken, checkAdmin, async (req, res) => {
   try {
     const result = await allUsers();
     res.status(200).json({ message: result });
@@ -21,7 +21,7 @@ router.get("/", checkToken, async (req, res) => {
   }
 });
 
-router.get("/:id", checkToken, async (req, res) => {
+router.get("/:id", checkToken, checkAdmin, async (req, res) => {
   const { id } = req.params;
 
   if (id) {
@@ -70,8 +70,13 @@ router.post("/login", async (req, res) => {
   try {
     const user = await login(username, password);
     //res.status(200).json({ token: user });
-    res.cookie("token", user, { httpOnly: true });
-    res.status(200).send();
+    if (user.error) {
+      res.status(401).json({ message: "not authorizied" });
+    } else {
+      
+      res.cookie("token", user, { httpOnly: true });
+      res.status(200).send();
+    }
   } catch (error) {
     console.log(error);
     res.status(401).json({ message: "not authorizied" });

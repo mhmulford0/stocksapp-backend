@@ -42,7 +42,7 @@ const login = async (username, password) => {
       );
       
     } else {
-      return ({message: "Username or password incorrect"})
+      return { error: "Username or password incorrect" };
     }
     
   } catch (error) {
