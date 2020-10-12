@@ -9,6 +9,7 @@ const userRouter = require("./routes/user/");
 app.use(express.json());
 const corsOptions = {
   origin: "*",
+  preflightContinue: true,
   methods: "GET,PUT,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
