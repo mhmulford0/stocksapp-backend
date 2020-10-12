@@ -8,7 +8,7 @@ const userRouter = require("./routes/user/");
 
 app.use(express.json());
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:3000",
   preflightContinue: true,
   methods: "GET,PUT,POST,DELETE",
   optionsSuccessStatus: 200,
@@ -16,7 +16,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
+app.options("*", cors());
 
 app.use("/api/user", userRouter);
 
