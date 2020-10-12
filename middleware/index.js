@@ -18,7 +18,7 @@ const checkAdmin = async (req, res, next) => {
     const tokenResult = await jwt.verify(token, process.env.AUTH_SECRET);
 
     if (tokenResult.role !== "admin") {
-      res.status(401).json({ message: "Not authorized" });
+      res.status(401).json({ message: "Not checck" });
     } else {
       next();
     }

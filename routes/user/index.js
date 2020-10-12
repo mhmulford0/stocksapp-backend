@@ -14,24 +14,10 @@ const {checkToken, checkAdmin} = require("../../middleware");
 
 router.get("/", checkToken, checkAdmin, async (req, res) => {
   try {
-    const result = await allUsers();
-    res.status(200).json({ message: result });
+    // const result =
+    res.status(200).json(await allUsers());
   } catch (error) {
     res.status(500).json({ message: "there was an error with your request" });
-  }
-});
-
-router.get("/:id", checkToken, checkAdmin, async (req, res) => {
-  const { id } = req.params;
-
-  if (id) {
-    try {
-      const result = await getUserById(id);
-      res.status(200).json({ data: result });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "there was an error" });
-    }
   }
 });
 
@@ -66,14 +52,12 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const user = await login(username, password);
     //res.status(200).json({ token: user });
     if (user.error) {
       res.status(401).json({ message: "not authorizied" });
     } else {
-      
       res.cookie("token", user, { httpOnly: true });
       res.status(200).send();
     }
@@ -81,9 +65,11 @@ router.post("/login", async (req, res) => {
     console.log(error);
     res.status(401).json({ message: "not authorizied" });
   }
-  
+});
 
-
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.status(204).end();
 });
 
 module.exports = router;
