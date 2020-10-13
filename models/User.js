@@ -7,7 +7,6 @@ const allUsers = () => {
 };
 
 const addUser = (username, email, password, role) => {
-  console.log(username, email, password, role);
   return db("users").insert({ username, email, password, role });
 };
 
@@ -27,14 +26,16 @@ const login = async (username, password) => {
       .from("users")
       .where({ username });
   } catch (error) {
-    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "your request could not be completed" });
   }
   
   try {
     const authed = await bcrypt.compare(password, user[0].password);
     if(authed) {
       return jwt.sign(
-        { username: user[0].username, role: user[0].role },
+        { sub: user[0].id, username: user[0].username, role: user[0].role },
         process.env.AUTH_SECRET,
         {
           expiresIn: "4h",
@@ -46,7 +47,7 @@ const login = async (username, password) => {
     }
     
   } catch (error) {
-    console.log(error);
+    return { error: "Error with request" };
   }
 };
 

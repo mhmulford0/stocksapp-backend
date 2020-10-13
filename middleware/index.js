@@ -5,7 +5,6 @@ const checkToken = async (req, res, next) => {
   try {
     const token = req.cookies.token || undefined;
     const tokenResult = await jwt.verify(token, process.env.AUTH_SECRET);
-    console.log(tokenResult.role);
     next();
   } catch (error) {
     res.status(401).json({ message: "you must be logged in" });

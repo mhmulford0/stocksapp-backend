@@ -14,7 +14,6 @@ const {checkToken, checkAdmin} = require("../../middleware");
 
 router.get("/", checkToken, checkAdmin, async (req, res) => {
   try {
-    // const result =
     res.status(200).json(await allUsers());
   } catch (error) {
     res.status(500).json({ message: "there was an error with your request" });
@@ -44,7 +43,6 @@ router.post("/signup", async (req, res) => {
       await addUser(username, email, hashedPassword, "user");
       res.status(201).json({ message: "user added" });
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: "there was an error with your request" });
     }
   }
@@ -54,7 +52,6 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await login(username, password);
-    //res.status(200).json({ token: user });
     if (user.error) {
       res.status(401).json({ message: "not authorizied" });
     } else {
@@ -62,7 +59,6 @@ router.post("/login", async (req, res) => {
       res.status(200).send();
     }
   } catch (error) {
-    console.log(error);
     res.status(401).json({ message: "not authorizied" });
   }
 });
