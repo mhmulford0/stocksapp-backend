@@ -2,8 +2,9 @@ require("dotenv").config();
 const db = require("../data/db-config");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const allUsers = () => {
-  return db("users");
+  return db("users").select("id", "username", "role").orderBy("id");
 };
 
 const addUser = (username, email, password, role) => {
