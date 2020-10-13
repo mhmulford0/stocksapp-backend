@@ -8,7 +8,7 @@ const allUsers = () => {
 };
 
 const addUser = (username, email, password, role) => {
-  return db("users").insert({ username, email, password, role });
+  return db("users").insert({ username, email, password, role: "user" });
 };
 
 const getUserById = (id) => {
@@ -44,9 +44,7 @@ const login = async (username, password) => {
       );
       
     } else {
-      return res
-        .status(500)
-        .json({ message: "your request could not be completed" });
+      return res.status(401).json({ message: "Not Authorized" });
     }
     
   } catch (error) {
