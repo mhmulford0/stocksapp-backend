@@ -52,14 +52,15 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await login(username, password);
-    if (user.error) {
-      res.status(401).json({ message: "not authorizied" });
+    if (!user) {
+      res.status(401).json({ message: "Incorrect username or password" });
     } else {
       res.cookie("token", user, { httpOnly: true });
       res.status(200).send();
     }
   } catch (error) {
-    res.status(401).json({ message: "not authorizied" });
+    
+    res.status(500).json({ message: "Error with request" });
   }
 });
 

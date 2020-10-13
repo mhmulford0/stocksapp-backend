@@ -27,30 +27,27 @@ const login = async (username, password) => {
       .from("users")
       .where({ username });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "your request could not be completed" });
+    return false;
   }
-  
-  try {
-    const authed = await bcrypt.compare(password, user[0].password);
-    if(authed) {
-      return jwt.sign(
-        { sub: user[0].id, username: user[0].username, role: user[0].role },
-        process.env.AUTH_SECRET,
-        {
-          expiresIn: "4h",
-        }
-      );
+  if(user){
+    try {
+      const authed = await bcrypt.compare(password, user[0].password);
+      if(authed) {
+        return jwt.sign(
+          { sub: user[0].id, username: user[0].username, role: user[0].role },
+          process.env.AUTH_SECRET,
+          {
+            expiresIn: "4h",
+          }
+        );
+        
+      } else {
+        return false
+      }
       
-    } else {
-      return res.status(401).json({ message: "Not Authorized" });
+    } catch (error) {
+      return false
     }
-    
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "your request could not be completed" });
   }
 };
 
