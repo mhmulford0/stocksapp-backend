@@ -22,7 +22,7 @@ const login = async (username, password) => {
   let user;
   try {
     user = await db
-      .select("username", "password", "role")
+      .select("username", "password", "role", "id")
       .from("users")
       .where({ username });
   } catch (error) {
@@ -43,11 +43,15 @@ const login = async (username, password) => {
       );
       
     } else {
-      return { error: "Username or password incorrect" };
+      return res
+        .status(500)
+        .json({ message: "your request could not be completed" });
     }
     
   } catch (error) {
-    return { error: "Error with request" };
+    return res
+      .status(500)
+      .json({ message: "your request could not be completed" });
   }
 };
 
