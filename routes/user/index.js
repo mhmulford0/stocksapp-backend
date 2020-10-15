@@ -12,6 +12,10 @@ const {
 
 const {checkToken, checkAdmin} = require("../../middleware");
 
+router.get('/auth', checkToken, (req, res) => {
+  res.status(200).end()
+})
+
 router.get("/", checkToken, checkAdmin, async (req, res) => {
   try {
     res.status(200).json(await allUsers());
@@ -55,8 +59,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       res.status(401).json({ message: "Incorrect username or password" });
     } else {
-      res.cookie("token", user, { httpOnly: true });
-      res.status(200).send();
+      res.status(200).json({token: user});
     }
   } catch (error) {
     
